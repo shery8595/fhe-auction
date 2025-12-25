@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Dashboard | FHE Auction</title>
+    <link rel="stylesheet" href="/src/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div class="background-globes">
+        <div class="globe globe-1"></div>
+        <div class="globe globe-2"></div>
+    </div>
+
+    <div class="app-container">
+        <header class="glass-header">
+            <div class="logo-section">
+                <a href="/" class="logo-link">
+                    <div class="logo-icon">🔐</div>
+                    <h1>FHE<span class="highlight">Auction</span></h1>
+                </a>
+            </div>
+            <nav class="main-nav">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/pages/auctions.html" class="nav-link">Auctions</a>
+                <a href="/pages/my-dashboard.html" class="nav-link active">My Dashboard</a>
+                <a href="/pages/create-auction.html" class="nav-link">Create</a>
+            </nav>
+            <div class="header-actions">
+                <button id="connect-wallet-btn" class="btn btn-primary">
+                    Connect Wallet
+                </button>
+                <div id="wallet-info" class="wallet-display hidden">
+                    <span id="wallet-address">0x...</span>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <!-- Page Header -->
+            <section class="page-header">
+                <h2>📊 My Dashboard</h2>
+                <p>Track your auctions, bids, wins, and refunds</p>
+            </section>
+
+            <!-- Connect Prompt -->
+            <div id="connect-prompt" class="connect-prompt glass-panel">
+                <div class="prompt-icon">🔗</div>
+                <h3>Connect Your Wallet</h3>
+                <p>Connect your wallet to view your personal auction activity</p>
+                <button id="prompt-connect-btn" class="btn btn-accent">Connect Wallet</button>
+            </div>
+
+            <!-- Dashboard Content (hidden until connected) -->
+            <div id="dashboard-content" class="dashboard-content hidden">
+
+                <!-- Quick Stats -->
+                <section class="dashboard-stats">
+                    <div class="stat-card glass-panel">
+                        <div class="stat-icon">📦</div>
+                        <div class="stat-content">
+                            <span id="my-auctions-count" class="stat-value">0</span>
+                            <span class="stat-label">My Auctions</span>
+                        </div>
+                    </div>
+                    <div class="stat-card glass-panel">
+                        <div class="stat-icon">🎯</div>
+                        <div class="stat-content">
+                            <span id="active-bids-count" class="stat-value">0</span>
+                            <span class="stat-label">Active Bids</span>
+                        </div>
+                    </div>
+                    <div class="stat-card glass-panel">
+                        <div class="stat-icon">🏆</div>
+                        <div class="stat-content">
+                            <span id="wins-count" class="stat-value">0</span>
+                            <span class="stat-label">Auctions Won</span>
+                        </div>
+                    </div>
+                    <div class="stat-card glass-panel">
+                        <div class="stat-icon">💰</div>
+                        <div class="stat-content">
+                            <span id="refunds-count" class="stat-value">0</span>
+                            <span class="stat-label">Refunds Available</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- My Created Auctions -->
+                <section class="dashboard-section">
+                    <div class="section-header">
+                        <h3>📦 My Created Auctions</h3>
+                        <a href="/pages/create-auction.html" class="btn btn-small btn-accent">+ Create New</a>
+                    </div>
+                    <div id="my-auctions-list" class="dashboard-list">
+                        <div class="empty-state">
+                            <p>You haven't created any auctions yet.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Active Bids -->
+                <section class="dashboard-section">
+                    <div class="section-header">
+                        <h3>🎯 My Active Bids</h3>
+                    </div>
+                    <div id="active-bids-list" class="dashboard-list">
+                        <div class="empty-state">
+                            <p>No active bids. <a href="/pages/auctions.html">Browse auctions</a> to place bids!</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Won Auctions -->
+                <section class="dashboard-section">
+                    <div class="section-header">
+                        <h3>🏆 Won Auctions</h3>
+                    </div>
+                    <div id="won-auctions-list" class="dashboard-list">
+                        <div class="empty-state">
+                            <p>No auctions won yet. Keep bidding!</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Refunds Available -->
+                <section class="dashboard-section">
+                    <div class="section-header">
+                        <h3>💰 Refunds Available</h3>
+                    </div>
+                    <div id="refunds-list" class="dashboard-list">
+                        <div class="empty-state">
+                            <p>No refunds available.</p>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+
+            <!-- Loading Overlay -->
+            <div id="loading-overlay" class="loading-overlay hidden">
+                <div class="spinner"></div>
+                <p>Loading your dashboard...</p>
+            </div>
+        </main>
+
+        <footer class="glass-panel footer">
+            <p>Powered by <a href="https://zama.ai" target="_blank">Zama FHE</a></p>
+        </footer>
+    </div>
+
+    <script type="module" src="/src/myDashboard.js"></script>
+</body>
+
+</html>

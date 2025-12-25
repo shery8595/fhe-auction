@@ -1,0 +1,19 @@
+{
+    "name": "fhe-auction-subgraph",
+    "version": "0.0.1",
+    "description": "Subgraph for FHE Auction Platform",
+    "repository": "https://github.com/yourusername/fhe-auction",
+    "license": "MIT",
+    "scripts": {
+        "codegen": "graph codegen",
+        "build": "graph build",
+        "deploy": "graph deploy --studio fhe-auction",
+        "create-local": "graph create --node http://localhost:8020/ fhe-auction",
+        "remove-local": "graph remove --node http://localhost:8020/ fhe-auction",
+        "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 fhe-auction"
+    },
+    "dependencies": {
+        "@graphprotocol/graph-cli": "0.69.0",
+        "@graphprotocol/graph-ts": "0.35.1"
+    }
+}

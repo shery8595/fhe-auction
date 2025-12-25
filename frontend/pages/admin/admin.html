@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | FHE Marketplace</title>
+    <link rel="stylesheet" href="/src/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="background-globes">
+        <div class="globe globe-1"></div>
+        <div class="globe globe-2"></div>
+    </div>
+
+    <div class="app-container">
+        <header class="glass-header">
+            <div class="logo-section">
+                <a href="/" class="logo-link">
+                    <div class="logo-icon">🔒</div>
+                    <h1>FHE<span class="highlight">Marketplace</span></h1>
+                </a>
+            </div>
+            <nav class="main-nav">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/pages/auctions.html" class="nav-link">Auctions</a>
+                <a href="/pages/my-dashboard.html" class="nav-link">Dashboard</a>
+                <a href="/pages/create-auction.html" class="nav-link">Create</a>
+                <a href="/pages/admin/admin.html" class="nav-link active">Admin</a>
+            </nav>
+            <div class="header-actions">
+                <span id="network-status" class="status-badge hidden">Wrong Network</span>
+                <button id="connect-wallet-btn" class="btn btn-primary">
+                    <span class="btn-text">Connect Wallet</span>
+                </button>
+                <div id="wallet-info" class="wallet-display hidden">
+                    <span id="wallet-address">0x...</span>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <!-- Hero Section -->
+            <section class="hero-section">
+                <h2>Admin Dashboard</h2>
+                <p>Review and approve auction submissions. Anyone can act as admin (for demo purposes).</p>
+            </section>
+
+            <!-- Loading State -->
+            <div id="loading-overlay" class="loading-overlay hidden">
+                <div class="spinner"></div>
+                <p>Processing...</p>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card glass-panel">
+                    <span class="stat-icon">📋</span>
+                    <div class="stat-content">
+                        <span class="stat-value" id="pending-count">0</span>
+                        <span class="stat-label">Pending Requests</span>
+                    </div>
+                </div>
+                <div class="stat-card glass-panel">
+                    <span class="stat-icon">✅</span>
+                    <div class="stat-content">
+                        <span class="stat-value" id="approved-count">0</span>
+                        <span class="stat-label">Approved Auctions</span>
+                    </div>
+                </div>
+                <div class="stat-card glass-panel">
+                    <span class="stat-icon">🔴</span>
+                    <div class="stat-content">
+                        <span class="stat-value" id="active-count">0</span>
+                        <span class="stat-label">Active Auctions</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pending Requests Section -->
+            <section class="admin-section">
+                <div class="section-header">
+                    <h3>📋 Pending Auction Requests</h3>
+                    <button id="refresh-btn" class="btn btn-secondary">🔄 Refresh</button>
+                </div>
+
+                <div id="pending-list" class="pending-list">
+                    <div class="empty-state" id="no-pending">
+                        <p>No pending requests. All caught up! 🎉</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- All Auctions Section -->
+            <section class="admin-section">
+                <div class="section-header">
+                    <h3>📊 All Deployed Auctions</h3>
+                </div>
+
+                <div id="auctions-table-container" class="table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Type</th>
+                                <th>Seller</th>
+                                <th>Status</th>
+                                <th>Bidders</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="auctions-tbody">
+                            <tr id="no-auctions-row">
+                                <td colspan="6" class="empty-cell">No auctions deployed yet.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Approval Modal -->
+    <div id="approval-modal" class="modal-overlay hidden">
+        <div class="modal glass-panel">
+            <div class="modal-header">
+                <h3>🚀 Deploy & Register Auction</h3>
+                <button class="modal-close" onclick="closeApprovalModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- Request Info -->
+                <div class="modal-info-grid">
+                    <div class="modal-info">
+                        <span class="info-label">Request ID:</span>
+                        <span id="modal-request-id" class="info-value">#0</span>
+                    </div>
+                    <div class="modal-info">
+                        <span class="info-label">Type:</span>
+                        <span id="modal-auction-type" class="info-value">First-Price</span>
+                    </div>
+                    <div class="modal-info">
+                        <span class="info-label">Title:</span>
+                        <span id="modal-auction-title" class="info-value">-</span>
+                    </div>
+                    <div class="modal-info">
+                        <span class="info-label">Duration:</span>
+                        <span id="modal-auction-duration" class="info-value">- min</span>
+                    </div>
+                </div>
+
+                <div class="modal-divider"></div>
+
+                <!-- Deploy Option -->
+                <div class="deploy-option">
+                    <h4>Option 1: Deploy from Browser (Recommended)</h4>
+                    <p class="option-desc">Click below to deploy the auction contract directly from your wallet.</p>
+                    <button id="deploy-and-register-btn" class="btn btn-accent full-width"
+                        onclick="deployAndRegister()">
+                        🚀 Deploy & Register Automatically
+                    </button>
+                </div>
+
+                <div class="modal-divider"></div>
+
+                <!-- Manual Address Option -->
+                <div class="manual-option">
+                    <h4>Option 2: Enter Existing Address</h4>
+                    <p class="option-desc">If you've already deployed the contract, enter its address:</p>
+                    <div class="form-group">
+                        <input type="text" id="auction-address-input" placeholder="0x..." pattern="^0x[a-fA-F0-9]{40}$">
+                    </div>
+                    <button class="btn btn-secondary full-width" onclick="confirmApproval()">
+                        Register Existing Contract
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="/src/adminDashboard.js"></script>
+</body>
+
+</html>

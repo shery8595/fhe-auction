@@ -1,0 +1,57 @@
+specVersion: 1.0.0
+indexerHints:
+  prune: auto
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: AuctionFactory
+    network: sepolia
+    source:
+      address: "0xcC1f9148Bdc1c68364d01691E53eaAdae1Aa879f"
+      abi: AuctionFactory
+      startBlock: 7200000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Auction
+        - User
+        - GlobalStats
+      abis:
+        - name: AuctionFactory
+          file: ./abis/AuctionFactory.json
+        - name: BaseAuction
+          file: ./abis/BaseAuction.json
+      eventHandlers:
+        - event: AuctionApproved(indexed uint256,indexed address)
+          handler: handleAuctionApproved
+      file: ./src/mapping.ts
+templates:
+  - kind: ethereum/contract
+    name: BaseAuction
+    network: sepolia
+    source:
+      abi: BaseAuction
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Auction
+        - Bid
+        - User
+        - Winner
+        - GlobalStats
+      abis:
+        - name: BaseAuction
+          file: ./abis/BaseAuction.json
+      eventHandlers:
+        - event: BidPlaced(indexed address,uint256,uint256)
+          handler: handleBidPlaced
+        - event: AuctionEnded(uint256)
+          handler: handleAuctionEnded
+        - event: WinnerRevealed(indexed address,uint256)
+          handler: handleWinnerRevealed
+      file: ./src/mapping.ts

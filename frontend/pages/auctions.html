@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FHE Auction Marketplace | Privacy-Preserving Auctions</title>
+    <link rel="stylesheet" href="/src/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="background-globes">
+        <div class="globe globe-1"></div>
+        <div class="globe globe-2"></div>
+    </div>
+
+    <div class="app-container">
+        <header class="glass-header">
+            <div class="logo-section">
+                <a href="/" class="logo-link">
+                    <div class="logo-icon">🔒</div>
+                    <h1>FHE<span class="highlight">Marketplace</span></h1>
+                </a>
+            </div>
+            <nav class="main-nav">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/pages/auctions.html" class="nav-link active">Auctions</a>
+                <a href="/pages/my-dashboard.html" class="nav-link">Dashboard</a>
+                <a href="/pages/create-auction.html" class="nav-link">Create</a>
+                <a href="/pages/admin/admin.html" class="nav-link">Admin</a>
+            </nav>
+            <div class="header-actions">
+                <span id="network-status" class="status-badge hidden">Wrong Network</span>
+                <button id="connect-wallet-btn" class="btn btn-primary">
+                    <span class="btn-text">Connect Wallet</span>
+                </button>
+                <div id="wallet-info" class="wallet-display hidden">
+                    <span id="wallet-address">0x...</span>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <!-- Hero Section -->
+            <section class="hero-section">
+                <h2>Privacy-Preserving Auction Marketplace</h2>
+                <p>Browse and bid on auctions with encrypted bids using Fully Homomorphic Encryption.</p>
+            </section>
+
+            <!-- Loading State -->
+            <div id="loading-overlay" class="loading-overlay hidden">
+                <div class="spinner"></div>
+                <p>Loading auctions...</p>
+            </div>
+
+            <!-- Filters -->
+            <div class="filters-bar glass-panel">
+                <div class="filter-group">
+                    <label>Status:</label>
+                    <select id="status-filter" class="filter-select">
+                        <option value="all">All Auctions</option>
+                        <option value="active">Active</option>
+                        <option value="ended">Ended</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Type:</label>
+                    <select id="type-filter" class="filter-select">
+                        <option value="all">All Types</option>
+                        <option value="0">First-Price</option>
+                        <option value="1">Vickrey</option>
+                        <option value="2">Dutch</option>
+                    </select>
+                </div>
+                <div class="filter-group stats">
+                    <span id="auction-count">0 auctions</span>
+                </div>
+            </div>
+
+            <!-- Auctions Grid -->
+            <div id="auctions-grid" class="auctions-grid">
+                <!-- Auction cards will be inserted here -->
+                <div class="empty-state" id="empty-state">
+                    <p>No auctions found. Connect your wallet to see auctions or create a new one.</p>
+                    <a href="/pages/create-auction.html" class="btn btn-accent">Create Auction</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script type="module" src="/src/auctionList.js"></script>
+</body>
+
+</html>

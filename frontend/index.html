@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FHE Auction Marketplace | Privacy-Preserving Bidding</title>
+    <link rel="stylesheet" href="/src/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="background-globes">
+        <div class="globe globe-1"></div>
+        <div class="globe globe-2"></div>
+    </div>
+
+    <div class="app-container">
+        <header class="glass-header">
+            <div class="logo-section">
+                <a href="/" class="logo-link">
+                    <div class="logo-icon">🔐</div>
+                    <h1>FHE<span class="highlight">Auction</span></h1>
+                </a>
+            </div>
+            <nav class="main-nav">
+                <a href="/" class="nav-link active">Home</a>
+                <a href="/pages/auctions.html" class="nav-link">Auctions</a>
+                <a href="/pages/my-dashboard.html" class="nav-link">Dashboard</a>
+                <a href="/pages/create-auction.html" class="nav-link">Create</a>
+                <a href="/pages/admin/admin.html" class="nav-link">Admin</a>
+            </nav>
+            <div class="header-actions">
+                <button id="connect-wallet-btn" class="btn btn-primary">
+                    Connect Wallet
+                </button>
+                <div id="wallet-info" class="wallet-display hidden">
+                    <span id="wallet-address">0x...</span>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <!-- Hero Section -->
+            <section class="hero-section">
+                <h2>Privacy-Preserving Auction Marketplace</h2>
+                <p>Bid confidentially using Fully Homomorphic Encryption. Your bids remain encrypted on-chain.</p>
+                <div class="hero-buttons">
+                    <a href="/pages/create-auction.html" class="btn btn-accent">Create Auction</a>
+                    <a href="#live-auctions" class="btn btn-secondary">Browse Auctions</a>
+                </div>
+            </section>
+
+            <!-- Loading State -->
+            <div id="loading-overlay" class="loading-overlay hidden">
+                <div class="spinner"></div>
+                <p>Loading auctions...</p>
+            </div>
+
+            <!-- Stats Cards -->
+            <section class="stats-grid">
+                <div class="stat-card glass-panel">
+                    <div class="stat-icon">🔥</div>
+                    <div class="stat-content">
+                        <span id="live-count" class="stat-value">-</span>
+                        <span class="stat-label">Live Auctions</span>
+                    </div>
+                </div>
+                <div class="stat-card glass-panel">
+                    <div class="stat-icon">⏳</div>
+                    <div class="stat-content">
+                        <span id="upcoming-count" class="stat-value">-</span>
+                        <span class="stat-label">Upcoming</span>
+                    </div>
+                </div>
+                <div class="stat-card glass-panel">
+                    <div class="stat-icon">✅</div>
+                    <div class="stat-content">
+                        <span id="ended-count" class="stat-value">-</span>
+                        <span class="stat-label">Completed</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Live Auctions -->
+            <section id="live-auctions" class="auction-section">
+                <div class="section-header">
+                    <h3>🔥 Live Auctions</h3>
+                    <a href="/pages/auctions.html" class="btn btn-small btn-secondary">View All</a>
+                </div>
+                <div id="live-auctions-grid" class="auctions-grid">
+                    <div class="empty-state">
+                        <p>No live auctions. <a href="/pages/create-auction.html">Create one!</a></p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Recent Auctions -->
+            <section class="auction-section">
+                <div class="section-header">
+                    <h3>📋 Recent Auctions</h3>
+                </div>
+                <div id="recent-auctions-grid" class="auctions-grid">
+                    <div class="empty-state">
+                        <p>No auctions yet.</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="glass-panel footer">
+            <p>Powered by <a href="https://zama.ai" target="_blank">Zama FHE</a> |
+                <a href="/pages/admin/admin.html">Admin Panel</a>
+            </p>
+        </footer>
+    </div>
+
+    <script type="module" src="/src/home.js"></script>
+</body>
+
+</html>

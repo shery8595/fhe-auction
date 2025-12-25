@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auction Details | FHE Marketplace</title>
+    <link rel="stylesheet" href="/src/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="background-globes">
+        <div class="globe globe-1"></div>
+        <div class="globe globe-2"></div>
+    </div>
+
+    <div class="app-container">
+        <header class="glass-header">
+            <div class="logo-section">
+                <a href="/" class="logo-link">
+                    <div class="logo-icon">🔒</div>
+                    <h1>FHE<span class="highlight">Marketplace</span></h1>
+                </a>
+            </div>
+            <nav class="main-nav">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/pages/auctions.html" class="nav-link active">Auctions</a>
+                <a href="/pages/my-dashboard.html" class="nav-link">Dashboard</a>
+                <a href="/pages/create-auction.html" class="nav-link">Create</a>
+                <a href="/pages/admin/admin.html" class="nav-link">Admin</a>
+            </nav>
+            <div class="header-actions">
+                <span id="network-status" class="status-badge hidden">Wrong Network</span>
+                <button id="connect-wallet-btn" class="btn btn-primary">
+                    <span class="btn-text">Connect Wallet</span>
+                </button>
+                <div id="wallet-info" class="wallet-display hidden">
+                    <span id="wallet-address">0x...</span>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <!-- Loading State -->
+            <div id="loading-overlay" class="loading-overlay hidden">
+                <div class="spinner"></div>
+                <p id="loading-message">Loading auction...</p>
+            </div>
+
+            <!-- Error State -->
+            <div id="error-state" class="error-state glass-panel hidden">
+                <h2>⚠️ Auction Not Found</h2>
+                <p>The auction you're looking for doesn't exist or couldn't be loaded.</p>
+                <a href="/pages/auctions.html" class="btn btn-accent">Back to Auctions</a>
+            </div>
+
+            <!-- Auction Content -->
+            <div id="auction-content" class="auction-detail-layout hidden">
+                <!-- Left Column: Auction Info -->
+                <div class="auction-info-column">
+                    <div class="glass-panel auction-main-card">
+                        <div class="card-header">
+                            <span id="auction-type-badge" class="auction-type-badge">🔒 First-Price</span>
+                            <span id="auction-status" class="status-badge active">Active</span>
+                        </div>
+                        <h1 id="auction-title" class="auction-detail-title">Loading...</h1>
+
+                        <!-- Hero NFT Image (shown for NFT auctions, replaces description) -->
+                        <div id="nft-hero-image" class="nft-hero-image hidden">
+                            <img id="nft-hero-img" src="" alt="NFT">
+                        </div>
+
+                        <!-- Text description (hidden for NFT auctions) -->
+                        <p id="auction-description" class="auction-detail-description">Loading description...</p>
+
+                        <div class="auction-meta-grid">
+                            <div class="meta-item">
+                                <span class="meta-label">Seller</span>
+                                <span id="auction-seller" class="meta-value">0x...</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">Minimum Bid</span>
+                                <span id="auction-min-bid" class="meta-value">- wei</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">Participants</span>
+                                <span id="auction-bidders" class="meta-value">0</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">Time Remaining</span>
+                                <span id="auction-timer" class="meta-value timer">--:--:--</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dutch Auction Price Display (hidden for other types) -->
+                    <div id="dutch-price-card" class="glass-panel hidden">
+                        <h3>📉 Current Price</h3>
+                        <div class="dutch-price-display">
+                            <span id="dutch-current-price" class="current-price">0</span>
+                            <span class="price-unit">wei</span>
+                        </div>
+                        <div class="dutch-price-info">
+                            <p>Next drop in: <span id="dutch-next-drop">--:--</span></p>
+                            <p>Reserve price: <span id="dutch-reserve">0</span> wei</p>
+                        </div>
+                    </div>
+
+                    <!-- Winner Card (after reveal) -->
+                    <div id="winner-card" class="glass-panel winner-card hidden">
+                        <h3>🏆 Winner</h3>
+                        <div class="winner-info">
+                            <span id="winner-address">0x...</span>
+                            <span id="winner-amount" class="winner-amount">0 wei</span>
+                        </div>
+                    </div>
+
+                    <!-- NFT Info Card (for NFT auctions) -->
+                    <div id="nft-info-card" class="glass-panel hidden">
+                        <h3>🖼️ NFT Being Auctioned</h3>
+                        <div class="nft-auction-info">
+                            <div class="nft-auction-image">
+                                <img id="nft-auction-image" src="" alt="NFT">
+                            </div>
+                            <div class="nft-auction-details">
+                                <span id="nft-auction-name" class="nft-auction-name">NFT Name</span>
+                                <span id="nft-auction-contract" class="nft-auction-contract">Contract: 0x...</span>
+                                <span id="nft-auction-token" class="nft-auction-token">Token ID: 0</span>
+                            </div>
+                        </div>
+                        <div id="nft-deposit-status" class="nft-deposit-status">
+                            <span id="nft-deposit-indicator" class="deposit-indicator pending">⏳ Awaiting NFT deposit
+                                from seller</span>
+                        </div>
+                    </div>
+
+                    <!-- NFT Deposit Card (for seller only) -->
+                    <div id="nft-deposit-card" class="glass-panel hidden">
+                        <h3>📦 Deposit Your NFT</h3>
+                        <p class="deposit-instruction">Before bidding can begin, you need to deposit your NFT to escrow.
+                        </p>
+                        <ol class="deposit-steps">
+                            <li>Click "Approve NFT" to allow this contract access</li>
+                            <li>Click "Deposit NFT" to transfer it to escrow</li>
+                        </ol>
+                        <div class="deposit-buttons">
+                            <button id="approve-nft-btn" class="btn btn-secondary full-width">
+                                ✅ Step 1: Approve NFT
+                            </button>
+                            <button id="deposit-nft-btn" class="btn btn-accent full-width" disabled>
+                                📦 Step 2: Deposit NFT
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Private Reserve Price Card (for seller only) -->
+                    <div id="reserve-price-card" class="glass-panel hidden">
+                        <h3>🔒 Set Private Reserve Price</h3>
+                        <p class="reserve-instruction">Set a minimum price that must be met for the auction to succeed.
+                            This price is <strong>encrypted and hidden</strong> from bidders!</p>
+                        <div class="reserve-form">
+                            <div class="input-group">
+                                <input type="number" id="reserve-price-input" placeholder="Enter reserve price" min="1">
+                                <span class="input-suffix">wei</span>
+                            </div>
+                            <p class="reserve-warning">⚠️ If the highest bid is below your reserve, the auction will
+                                fail and all bidders will be refunded.</p>
+                            <button id="set-reserve-btn" class="btn btn-accent full-width">
+                                🔐 Set Encrypted Reserve Price
+                            </button>
+                        </div>
+                        <div id="reserve-status" class="reserve-status hidden">
+                            <span class="reserve-set-indicator">✅ Reserve price set (hidden from bidders)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Actions -->
+                <div class="auction-actions-column">
+                    <!-- Bid Form (for sealed auctions) -->
+                    <div id="sealed-bid-card" class="glass-panel">
+                        <div class="card-header">
+                            <h3>💰 Place Encrypted Bid</h3>
+                        </div>
+                        <div class="card-body">
+                            <div id="fhe-status" class="fhe-status">
+                                <span class="fhe-indicator">🔐</span>
+                                <span>Your bid will be encrypted before leaving your browser</span>
+                            </div>
+
+                            <form id="bid-form">
+                                <div class="form-group">
+                                    <label for="bid-amount">Bid Amount (wei)</label>
+                                    <input type="number" id="bid-amount" placeholder="Enter your bid" min="1" required>
+                                </div>
+                                <button type="submit" id="place-bid-btn" class="btn btn-accent full-width" disabled>
+                                    Connect Wallet to Bid
+                                </button>
+                            </form>
+
+                            <p class="bid-note">Escrow amount will equal your bid. You'll get refunded if you don't win.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Dutch Bid Button (for Dutch auctions) -->
+                    <div id="dutch-bid-card" class="glass-panel hidden">
+                        <div class="card-header">
+                            <h3>⚡ Instant Buy</h3>
+                        </div>
+                        <div class="card-body">
+                            <p class="dutch-instruction">Click to buy at the current price. First bidder wins!</p>
+                            <button id="dutch-bid-btn" class="btn btn-accent full-width" disabled>
+                                Buy Now for <span id="dutch-buy-price">0</span> wei
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- User Status Card -->
+                    <div class="glass-panel">
+                        <div class="card-header">
+                            <h3>📋 Your Status</h3>
+                        </div>
+                        <div id="user-status" class="card-body">
+                            <p class="status-message">Connect wallet to see your status.</p>
+                        </div>
+                    </div>
+
+                    <!-- Actions Card (End Auction, Reveal, Claim) -->
+                    <div id="auction-actions-card" class="glass-panel hidden">
+                        <div class="card-header">
+                            <h3>⚙️ Actions</h3>
+                        </div>
+                        <div class="card-body action-buttons">
+                            <button id="end-auction-btn" class="btn btn-secondary full-width hidden">
+                                🏁 End Auction
+                            </button>
+                            <button id="reveal-winner-btn" class="btn btn-accent full-width hidden">
+                                🔓 Reveal Winner
+                            </button>
+                            <button id="claim-refund-btn" class="btn btn-secondary full-width hidden">
+                                💵 Claim Refund
+                            </button>
+                            <button id="claim-winnings-btn" class="btn btn-success full-width hidden">
+                                💰 Claim Winnings (Seller)
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- FHE SDK is now bundled via npm, no CDN needed -->
+    <script type="module" src="/src/auctionDetail.js"></script>
+</body>
+
+</html>

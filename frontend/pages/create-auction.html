@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Auction | FHE Marketplace</title>
+    <link rel="stylesheet" href="/src/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="background-globes">
+        <div class="globe globe-1"></div>
+        <div class="globe globe-2"></div>
+    </div>
+
+    <div class="app-container">
+        <header class="glass-header">
+            <div class="logo-section">
+                <a href="/" class="logo-link">
+                    <div class="logo-icon">🔒</div>
+                    <h1>FHE<span class="highlight">Marketplace</span></h1>
+                </a>
+            </div>
+            <nav class="main-nav">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/pages/auctions.html" class="nav-link">Auctions</a>
+                <a href="/pages/my-dashboard.html" class="nav-link">Dashboard</a>
+                <a href="/pages/create-auction.html" class="nav-link active">Create</a>
+                <a href="/pages/admin/admin.html" class="nav-link">Admin</a>
+            </nav>
+            <div class="header-actions">
+                <span id="network-status" class="status-badge hidden">Wrong Network</span>
+                <button id="connect-wallet-btn" class="btn btn-primary">
+                    <span class="btn-text">Connect Wallet</span>
+                </button>
+                <div id="wallet-info" class="wallet-display hidden">
+                    <span id="wallet-address">0x...</span>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <!-- Hero Section -->
+            <section class="hero-section">
+                <h2>Create New Auction</h2>
+                <p>Submit an auction request. Once approved by admin, your auction will go live.</p>
+            </section>
+
+            <!-- Loading State -->
+            <div id="loading-overlay" class="loading-overlay hidden">
+                <div class="spinner"></div>
+                <p>Submitting auction request...</p>
+            </div>
+
+            <!-- Form Card -->
+            <div class="form-container glass-panel">
+                <form id="create-auction-form">
+                    <!-- NFT Selection -->
+                    <div class="form-section">
+                        <h3>🖼️ List an NFT (Optional)</h3>
+
+                        <div class="nft-toggle">
+                            <label class="toggle-option">
+                                <input type="checkbox" id="nft-mode-toggle">
+                                <span class="toggle-label">I want to auction an NFT from my wallet</span>
+                            </label>
+                        </div>
+
+                        <div id="nft-section" class="hidden">
+                            <div id="nft-loading" class="nft-loading hidden">
+                                <div class="spinner-small"></div>
+                                <span>Loading your NFTs...</span>
+                            </div>
+
+                            <div id="nft-empty" class="nft-empty hidden">
+                                <p>No NFTs found in your wallet on Sepolia.</p>
+                            </div>
+
+                            <div id="nft-grid" class="nft-grid">
+                                <!-- NFT cards will be populated here -->
+                            </div>
+
+                            <!-- Selected NFT Preview -->
+                            <div id="selected-nft" class="selected-nft hidden">
+                                <h4>Selected NFT</h4>
+                                <div class="selected-nft-card">
+                                    <img id="selected-nft-image" src="" alt="Selected NFT">
+                                    <div class="selected-nft-info">
+                                        <span id="selected-nft-name">NFT Name</span>
+                                        <span id="selected-nft-collection">Collection</span>
+                                        <input type="hidden" id="selected-nft-contract">
+                                        <input type="hidden" id="selected-nft-token-id">
+                                    </div>
+                                    <button type="button" id="clear-nft-btn" class="btn btn-small btn-secondary">✕
+                                        Clear</button>
+                                </div>
+                                <p class="nft-note">⚠️ You'll need to approve the NFT transfer before submitting.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Basic Info -->
+                    <div class="form-section">
+                        <h3>📦 Auction Details</h3>
+
+                        <div class="form-group">
+                            <label for="auction-title">Title *</label>
+                            <input type="text" id="auction-title" placeholder="e.g., Rare NFT Collection" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="auction-description">Description</label>
+                            <textarea id="auction-description" rows="3"
+                                placeholder="Describe what you're auctioning..."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Auction Type -->
+                    <div class="form-section">
+                        <h3>🎯 Auction Type</h3>
+
+                        <div class="auction-type-selector">
+                            <label class="type-option">
+                                <input type="radio" name="auction-type" value="0" checked>
+                                <div class="type-card">
+                                    <span class="type-icon">🔒</span>
+                                    <span class="type-name">First-Price</span>
+                                    <span class="type-desc">Highest bid wins. Winner pays their bid.</span>
+                                </div>
+                            </label>
+
+                            <label class="type-option">
+                                <input type="radio" name="auction-type" value="1">
+                                <div class="type-card">
+                                    <span class="type-icon">🏆</span>
+                                    <span class="type-name">Vickrey</span>
+                                    <span class="type-desc">Highest bid wins. Winner pays second-highest bid.</span>
+                                </div>
+                            </label>
+
+                            <label class="type-option">
+                                <input type="radio" name="auction-type" value="2">
+                                <div class="type-card">
+                                    <span class="type-icon">📉</span>
+                                    <span class="type-name">Dutch</span>
+                                    <span class="type-desc">Price decreases over time. First bid wins.</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Timing -->
+                    <div class="form-section">
+                        <h3>⏰ Duration</h3>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="duration-value">Duration *</label>
+                                <input type="number" id="duration-value" value="60" min="1" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="duration-unit">Unit</label>
+                                <select id="duration-unit">
+                                    <option value="1">Minutes</option>
+                                    <option value="60" selected>Hours</option>
+                                    <option value="1440">Days</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pricing -->
+                    <div class="form-section" id="standard-pricing">
+                        <h3>💰 Pricing</h3>
+
+                        <div class="form-group">
+                            <label for="minimum-bid">Minimum Bid (wei) *</label>
+                            <input type="number" id="minimum-bid" value="100" min="1" required>
+                        </div>
+                    </div>
+
+                    <!-- Dutch-specific pricing -->
+                    <div class="form-section hidden" id="dutch-pricing">
+                        <h3>💰 Dutch Auction Pricing</h3>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="starting-price">Starting Price (wei) *</label>
+                                <input type="number" id="starting-price" value="10000" min="1">
+                            </div>
+                            <div class="form-group">
+                                <label for="reserve-price">Reserve Price (wei) *</label>
+                                <input type="number" id="reserve-price" value="1000" min="1">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="price-decrement">Price Decrement (wei) *</label>
+                                <input type="number" id="price-decrement" value="100" min="1">
+                            </div>
+                            <div class="form-group">
+                                <label for="decrement-interval">Decrement Interval (seconds) *</label>
+                                <input type="number" id="decrement-interval" value="60" min="1">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit -->
+                    <div class="form-section">
+                        <button type="submit" id="submit-btn" class="btn btn-accent full-width" disabled>
+                            Connect Wallet to Submit
+                        </button>
+                        <p class="form-note">Your auction will be reviewed by an admin before going live.</p>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <script type="module" src="/src/createAuction.js"></script>
+</body>
+
+</html>

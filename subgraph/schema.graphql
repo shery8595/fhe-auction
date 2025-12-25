@@ -1,0 +1,84 @@
+type Auction @entity {
+  id: ID!                          # Auction contract address (lowercase)
+  title: String!
+  description: String!
+  seller: User!                    # Seller (User entity)
+  sellerAddress: Bytes!            # Seller address (for queries)
+  auctionType: AuctionType!        # First-Price, Vickrey, Dutch
+  minimumBid: BigInt!
+  startTime: BigInt!
+  endTime: BigInt!
+  ended: Boolean!
+  
+  # NFT Info
+  hasNFT: Boolean!
+  nftContract: Bytes
+  nftTokenId: BigInt
+  nftClaimed: Boolean
+  
+  # Privacy features (flags only, not actual values)
+  hasReservePrice: Boolean!
+  
+  # Statistics
+  bidCount: Int!
+  bidderCount: Int!
+  
+  # Relationships
+  bids: [Bid!]! @derivedFrom(field: "auction")
+  winner: Winner @derivedFrom(field: "auction")
+  
+  # Metadata
+  createdAt: BigInt!
+  createdTxHash: Bytes!
+  createdBlock: BigInt!
+  endedAt: BigInt
+  endedTxHash: Bytes
+  endedBlock: BigInt
+}
+
+enum AuctionType {
+  FIRST_PRICE
+  VICKREY
+  DUTCH
+}
+
+type Bid @entity {
+  id: ID!                          # tx hash + log index
+  auction: Auction!
+  bidder: User!                    # Bidder (User entity)
+  bidderAddress: Bytes!            # Bidder address (for queries)
+  escrowAmount: BigInt!            # Public escrow (not actual bid amount)
+  timestamp: BigInt!
+  txHash: Bytes!
+  blockNumber: BigInt!
+}
+
+type User @entity {
+  id: ID!                          # User address (lowercase)
+  auctionsCreated: [Auction!]! @derivedFrom(field: "seller")
+  bids: [Bid!]! @derivedFrom(field: "bidder")
+  totalAuctionsCreated: Int!
+  totalBids: Int!
+  firstSeenAt: BigInt!
+  lastSeenAt: BigInt!
+}
+
+type Winner @entity {
+  id: ID!                          # Auction address (same as auction id)
+  auction: Auction!
+  winner: Bytes!
+  winningBid: BigInt!              # Only available after reveal
+  revealedAt: BigInt!
+  revealTxHash: Bytes!
+  revealBlock: BigInt!
+}
+
+type GlobalStats @entity {
+  id: ID!                          # Singleton: "global"
+  totalAuctions: Int!
+  activeAuctions: Int!
+  endedAuctions: Int!
+  totalBids: Int!
+  totalUsers: Int!
+  lastUpdated: BigInt!
+}
