@@ -451,7 +451,20 @@ export default function AuctionDetailPage() {
                 return;
             }
 
-            console.log("🔓 Step 1: Fetching encrypted winner data from blockchain...");
+            console.log("🔍 Step 1: Checking if any bids were placed...");
+
+            // Check if there are any bids
+            const state = await contract.getAuctionState();
+            const bidderCount = Number(state.bidderCount);
+
+            if (bidderCount === 0) {
+                alert("❌ No bids were placed in this auction.");
+                setRevealingWinner(false);
+                return;
+            }
+
+            console.log(`✅ Found ${bidderCount} bidder(s)`);
+            console.log("🔓 Step 2: Fetching encrypted winner data from blockchain...");
 
             // Fetch encrypted handles from the contract
             const encryptedWinnerIndex = await contract.getEncryptedWinnerIndex();
@@ -461,7 +474,7 @@ export default function AuctionDetailPage() {
             console.log("   Winner Index Handle:", encryptedWinnerIndex.toString());
             console.log("   Winning Bid Handle:", encryptedWinningBid.toString());
 
-            console.log("� Step 2: Decrypting via Zama Relayer (v0.9)...");
+            console.log("🔐 Step 3: Decrypting via Zama Relayer (v0.9)...");
 
             // Import the decryption utility
             const { decryptAuctionWinner } = await import("@/lib/fheDecryption");
@@ -477,7 +490,7 @@ export default function AuctionDetailPage() {
             console.log("   Decrypted Winner Index:", decryptionResult.decryptedIndex);
             console.log("   Decrypted Winning Bid:", ethers.formatEther(decryptionResult.decryptedBid), "ETH");
 
-            console.log("📝 Step 3: Submitting clear values + proof to contract...");
+            console.log("📝 Step 4: Submitting clear values + proof to contract...");
 
             // Call revealWinner with the decrypted values and proof
             const tx = await contract.revealWinner(
