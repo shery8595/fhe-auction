@@ -756,7 +756,7 @@ npm run coverage
 ```
 fhe-auction-platform/
 ├── contracts/                      # Solidity smart contracts
-│   ├── AuctionFactory.sol          # Factory with Chainlink automation
+│   ├── AuctionFactory.sol          # Factory 
 │   ├── BaseAuction.sol             # Abstract base with FHE logic
 │   └── FirstPriceAuction.sol       # First-price implementation
 │
@@ -812,7 +812,7 @@ fhe-auction-platform/
 
 | Contract | Size | Lines | Purpose |
 |----------|------|-------|---------|
-| `AuctionFactory.sol` | 12.9 KB | 367 | Factory pattern + Chainlink automation |
+| `AuctionFactory.sol` | 12.9 KB | 367 | Factory pattern |
 | `BaseAuction.sol` | 24.2 KB | 686 | Abstract base with FHE operations |
 | `FirstPriceAuction.sol` | 7.7 KB | 220 | First-price sealed-bid implementation |
 
@@ -823,7 +823,6 @@ fhe-auction-platform/
 **Key Features**:
 - Request-based auction creation
 - Admin approval workflow
-- Chainlink Automation integration
 - Auction registry and tracking
 
 **Main Functions**:
@@ -1157,7 +1156,6 @@ Comprehensive test suite with **85 passing tests**:
 **Integration Tests**:
 - ✅ Factory → Auction deployment
 - ✅ Multiple bidders scenario
-- ✅ Chainlink automation
 - ✅ End-to-end auction flow
 
 **Edge Cases**:
@@ -1284,7 +1282,6 @@ NEXT_PUBLIC_SUBGRAPH_URL=https://api.studio.thegraph.com/query/.../fhe-auction/v
 - FHE operations are computationally expensive (gas costs)
 - Decryption gateway is a trusted component (Zama network)
 - Admin has privileged access (consider multi-sig)
-- Chainlink automation requires LINK funding
 
 ### Privacy Guarantees
 
